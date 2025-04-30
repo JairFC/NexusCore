@@ -1,0 +1,27 @@
+{
+  "name": "nexuscore",
+  "version": "1.0.0",
+  "description": "Sistema base para monitoreo y gestión de red. Incluye:",
+  "main": "index.js",
+  "dependencies": {
+    "detect-libc": "^2.0.4",
+    "enhanced-resolve": "^5.18.1",
+    "graceful-fs": "^4.2.11",
+    "jiti": "^2.4.2",
+    "lightningcss": "^1.29.2",
+    "lightningcss-linux-x64-gnu": "^1.29.2",
+    "nanoid": "^3.3.11",
+    "picocolors": "^1.1.1",
+    "postcss": "^8.5.3",
+    "source-map-js": "^1.2.1",
+    "tailwindcss": "^4.1.4",
+    "tapable": "^2.2.1"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC"
+}

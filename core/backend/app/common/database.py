@@ -16,6 +16,7 @@ async def connect_to_db():
     try:
         conn = await asyncpg.connect(**DB_CONFIG)
         print(" Conexión a PostgreSQL establecida.")
-        await conn.close()
+        return conn
     except Exception as e:
         print(f" Error al conectar a PostgreSQL: {e}")
+        return None

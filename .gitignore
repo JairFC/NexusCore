@@ -1,0 +1,31 @@
+# Entornos virtuales
+.venv/
+env/
+
+# Python
+__pycache__/
+*.pyc
+*.pyo
+
+# Node
+node_modules/
+dist/
+.vite/
+
+# Logs y archivos temporales
+*.log
+*.sqlite3
+*.db
+
+# Docker
+*.pid
+*.sock
+*.tar
+docker-compose.override.yml
+
+# Archivos sensibles
+.env
+.env.*
+
+# VSCode settings locales
+.vscode/
