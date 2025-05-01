@@ -1,9 +1,12 @@
-from fastapi import APIRouter
-from app.scanner.utils import realizar_ping
+from fastapi import APIRouter, Query
+from app.scanner.utils import scan_network
 
 router = APIRouter()
 
 @router.get("/test")
 async def test_ping():
-    resultado = realizar_ping("8.8.8.8")
-    return {"resultado": resultado}
+    return {"resultado": True}
+
+@router.get("/scan")
+async def scan(network: str = Query(..., description="Red en formato CIDR, ej: 192.168.1.0/24")):
+    return await scan_network(network)
