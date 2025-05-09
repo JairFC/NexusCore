@@ -1,11 +1,16 @@
 import { useState } from 'react';
 import axios from 'axios';
 import { motion, AnimatePresence } from 'framer-motion';
+import { useNavigate } from 'react-router-dom';
+import { useScannerStore } from '../store/scannerStore';
 
 function Scanner() {
   const [network, setNetwork] = useState('');
   const [results, setResults] = useState({ conectados: [], desconectados: [] });
   const [loading, setLoading] = useState(false);
+
+  const navigate = useNavigate();
+  const setConectados = useScannerStore(state => state.setConectados);
 
   const handleScan = async () => {
     setLoading(true);
@@ -21,6 +26,16 @@ function Scanner() {
     } finally {
       setLoading(false);
     }
+  };
+
+  const copiarAlPortapapeles = () => {
+    const texto = results.conectados.join('\n');
+    navigator.clipboard.writeText(texto);
+  };
+
+  const iniciarEtapa2 = () => {
+    setConectados(results.conectados);
+    navigate('/scanner/advanced');
   };
 
   const cardVariant = {
@@ -62,7 +77,7 @@ function Scanner() {
 
       <div className="flex justify-center gap-10">
         <AnimatePresence>
-          {results.conectados.length > 0 && (
+          {results.conectados.filter(Boolean).length > 0 && (
             <motion.div
               initial="hidden"
               animate="visible"
@@ -71,12 +86,16 @@ function Scanner() {
             >
               <h2 className="text-2xl font-semibold mb-4">Conectados ({results.conectados.length})</h2>
               <ul className="overflow-auto h-60">
-                {results.conectados.map(ip => <li key={ip}>{ip}</li>)}
+                {results.conectados.filter(Boolean).map(ip => <li key={ip}>{ip}</li>)}
               </ul>
+              <div className="mt-4 flex gap-2">
+                <button onClick={copiarAlPortapapeles} className="bg-gray-700 px-3 py-2 rounded">Copiar</button>
+                <button onClick={iniciarEtapa2} className="bg-green-600 px-3 py-2 rounded">Análisis Avanzado</button>
+              </div>
             </motion.div>
           )}
 
-          {results.desconectados.length > 0 && (
+          {results.desconectados.filter(Boolean).length > 0 && (
             <motion.div
               initial="hidden"
               animate="visible"
@@ -85,7 +104,7 @@ function Scanner() {
             >
               <h2 className="text-2xl font-semibold mb-4">Desconectados ({results.desconectados.length})</h2>
               <ul className="overflow-auto h-60">
-                {results.desconectados.map(ip => <li key={ip}>{ip}</li>)}
+                {results.desconectados.filter(Boolean).map(ip => <li key={ip}>{ip}</li>)}
               </ul>
             </motion.div>
           )}
