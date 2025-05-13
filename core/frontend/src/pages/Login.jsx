@@ -1,3 +1,4 @@
+import React from 'react';
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios'; // ✅ No olvides importar Axios aquí
@@ -11,10 +12,11 @@ function Login() {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    const apiBaseUrl = import.meta.env.VITE_API_URL || 'http://localhost:8000';
+
+    const API = import.meta.env.VITE_API_URL;
 
     try {
-      const response = await axios.post(`${apiBaseUrl}/auth/login`, {
+      const response = await axios.post(`${API}/auth/login`, {
         username,
         password,
       });

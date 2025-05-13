@@ -1,3 +1,4 @@
+import React from 'react';
 import { useState } from 'react';
 import axios from 'axios';
 import { motion, AnimatePresence } from 'framer-motion';
@@ -30,8 +31,19 @@ function Scanner() {
 
   const copiarAlPortapapeles = () => {
     const texto = results.conectados.join('\n');
-    navigator.clipboard.writeText(texto);
+    const textarea = document.createElement('textarea');
+    textarea.value = texto;
+    document.body.appendChild(textarea);
+    textarea.select();
+    try {
+      document.execCommand('copy');
+      alert('¡Copiado al portapapeles!');
+    } catch (err) {
+      alert('No se pudo copiar al portapapeles');
+    }
+    document.body.removeChild(textarea);
   };
+  
 
   const iniciarEtapa2 = () => {
     setConectados(results.conectados);
