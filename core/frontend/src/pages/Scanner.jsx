@@ -3,7 +3,7 @@ import { useState } from 'react';
 import axios from 'axios';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useNavigate } from 'react-router-dom';
-import { useScannerStore } from '../store/scannerStore';
+import { useScannerStore } from '../store/scannerStore'; // Added
 
 function Scanner() {
   const [network, setNetwork] = useState('');
@@ -11,11 +11,24 @@ function Scanner() {
   const [loading, setLoading] = useState(false);
 
   const navigate = useNavigate();
-  const setConectados = useScannerStore(state => state.setConectados);
+  // Updated to get more from the store
+  const { 
+    setConectados, // Keep this to set IPs into the store
+    performAdvancedScan, 
+    isAdvancedScanning // For button state
+  } = useScannerStore(state => ({
+    setConectados: state.setConectados,
+    performAdvancedScan: state.performAdvancedScan,
+    isAdvancedScanning: state.isAdvancedScanning,
+  }));
+
 
   const handleScan = async () => {
     setLoading(true);
     setResults({ conectados: [], desconectados: [] });
+    // Clear previous advanced scan results when a new ICMP scan starts
+    // This is an implicit requirement, otherwise old data might show on navigation
+    useScannerStore.getState().clearAdvancedScanResults(); 
     try {
       const response = await axios.get(`${import.meta.env.VITE_API_URL}/scanner/scan`, {
         params: { network }
@@ -44,9 +57,19 @@ function Scanner() {
     document.body.removeChild(textarea);
   };
   
+  // Renamed iniciarEtapa2 to handleAdvancedScan and updated its logic
+  const handleAdvancedScan = async () => {
+    // 1. Set the current connected IPs (from local ICMP scan) into the store
+    //    This is crucial so performAdvancedScan uses the correct list.
+    //    Filter out any undefined/null values from results.conectados just in case.
+    const validConectados = results.conectados.filter(Boolean);
+    setConectados(validConectados); 
 
-  const iniciarEtapa2 = () => {
-    setConectados(results.conectados);
+    // 2. Perform the advanced scan using the action from the store
+    //    The performAdvancedScan action will use the 'conectados' it gets from the store.
+    await performAdvancedScan();
+    
+    // 3. Navigate to the results page
     navigate('/scanner/advanced');
   };
 
@@ -73,11 +96,11 @@ function Scanner() {
           className="bg-blue-600 hover:bg-blue-500 text-white font-semibold py-3 px-6 rounded-lg shadow-lg transition"
           disabled={loading}
         >
-          {loading ? 'Escaneando...' : 'Iniciar Escaneo'}
+          {loading ? 'Escaneando...' : 'Iniciar Escaneo ICMP'} 
         </button>
       </div>
 
-      {loading && (
+      {loading && ( // This is for ICMP scan loading
         <div className="text-center my-4">
           <motion.div
             animate={{ rotate: 360 }}
@@ -102,7 +125,14 @@ function Scanner() {
               </ul>
               <div className="mt-4 flex gap-2">
                 <button onClick={copiarAlPortapapeles} className="bg-gray-700 px-3 py-2 rounded">Copiar</button>
-                <button onClick={iniciarEtapa2} className="bg-green-600 px-3 py-2 rounded">Análisis Avanzado</button>
+                {/* Modified Button Below */}
+                <button 
+                  onClick={handleAdvancedScan} 
+                  className="bg-green-600 hover:bg-green-500 text-white font-semibold px-3 py-2 rounded transition"
+                  disabled={isAdvancedScanning || results.conectados.filter(Boolean).length === 0}
+                >
+                  {isAdvancedScanning ? 'Analizando...' : 'Análisis Avanzado'}
+                </button>
               </div>
             </motion.div>
           )}

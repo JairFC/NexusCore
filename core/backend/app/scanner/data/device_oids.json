@@ -1,0 +1,55 @@
+{
+  "manufacturers": [
+    {
+      "name": "Ubiquiti Networks",
+      "models": [
+        {
+          "model_name": "AirMax AC Series",
+          "sysDescr_pattern": "AirMax AC|5AC|LiteBeam 5AC|Rocket 5AC|NanoBeam 5AC",
+          "oids": {
+            "firmware_version": "1.3.6.1.4.1.41112.1.4.5.1.5.0"
+          }
+        },
+        {
+          "model_name": "NanoStation M5 / Loco M5",
+          "sysDescr_pattern": "NanoStation M5|Loco M5",
+          "oids": {
+            "firmware_version": "1.3.6.1.4.1.41112.1.4.5.1.5.0"
+          }
+        },
+        {
+          "model_name": "AirFiber 60",
+          "sysDescr_pattern": "AF60|AirFiber 60",
+          "oids": {
+            "firmware_version": "1.3.6.1.4.1.41112.1.4.5.1.5.0"
+          }
+        }
+      ],
+      "general_oids": {
+        "ubntFirmwareVersion": "1.3.6.1.4.1.41112.1.4.5.1.5.0"
+      }
+    },
+    {
+      "name": "MikroTik",
+      "models": [
+        {
+          "model_name": "LH5 Series",
+          "sysDescr_pattern": "RouterBOARD.*LHG 5|RouterBOARD.*LH5",
+          "oids": {
+            "board_name": "1.3.6.1.4.1.14988.1.1.7.3.0"
+          }
+        },
+        {
+          "model_name": "RouterBOARD (Generic)",
+          "sysDescr_pattern": "RouterBOARD",
+          "oids": {
+            "board_name": "1.3.6.1.4.1.14988.1.1.7.3.0"
+          }
+        }
+      ],
+      "general_oids": {
+        "routeros_version": "1.3.6.1.4.1.14988.1.1.7.4.0"
+      }
+    }
+  ]
+}
